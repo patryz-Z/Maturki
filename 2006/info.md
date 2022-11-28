@@ -1,1 +1,0 @@
-zadanko 1
