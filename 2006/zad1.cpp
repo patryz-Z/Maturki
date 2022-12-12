@@ -1,59 +1,54 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+
 using namespace std;
 
 int main(void)
 {
-	fstream plik_z_danymi;
-	plik_z_danymi.open("dane.txt", ios::in);
+	fstream base_file;
+	base_file.open("dane.txt", ios::in);
 
-	string slowa[1000] = { };
+	string strings_base[1000] = {};
+	int base_len = sizeof(strings_base) / sizeof(strings_base[0]);
 
-
-	int dlugosc = sizeof(slowa) / sizeof(slowa[0]);
-
-	for (int i = 0; i < dlugosc; i++)
+	for (int i = 0; i < base_len; i++)
 	{
-		plik_z_danymi >> slowa[i];
-
+		base_file >> strings_base[i];
 	}
-	
-	sort(slowa, slowa + dlugosc);
 
-	bool wiecej_niz_raz = false;
-	int ile_takich = 0;
-	int strike = 1;
-	int najwiecej_razy = 0;
-	string slowo_najwiecej_razy = "";
+	sort(strings_base, strings_base + base_len);
 
-	for (int i = 0; i < dlugosc-1; i++)
+	int over_one = 0;
+
+	int most_times = 0;
+	string most_string = "";
+
+	int local = 1;
+
+	for (int i = 0; i < base_len-1; i++)
 	{
-		if (slowa[i] == slowa[i + 1])
+		if (strings_base[i] == strings_base[i + 1])
 		{
-			wiecej_niz_raz = true;
-			strike++;
+			local++;
 		}
 		else
 		{
-			if (wiecej_niz_raz)
+			if (local > most_times)
 			{
-				ile_takich++;
-				wiecej_niz_raz = false;
-
-				if (strike > najwiecej_razy)
-				{
-					najwiecej_razy = strike;
-					slowo_najwiecej_razy = slowa[i];
-					
-				}
+				most_times = local;
+				most_string = strings_base[i];
 			}
-
-			strike = 1;
+			if (local != 1)
+			{
+				over_one++;
+			}
+			local = 1;
 		}
 	}
 
-	cout << ile_takich << " wystapilo wiecej niz raz\n";
-	cout << "Najwiecej wystapilo slowo: " << slowo_najwiecej_razy << " wystapilo: " << najwiecej_razy << " razy\n";
+	cout << "Jest: " << over_one << " slow wystepujacych wiecej niz 1 raz\n";
+	cout << "Najczestrzym slowem jest: '" << most_string << "'\n";
+	cout << "Liczba jego wystapien: " << most_times << endl;
 
 }
