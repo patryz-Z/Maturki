@@ -58,29 +58,39 @@ int main(void)
 {
 	int ile[3] = {};
 
-
+	int ile_w_przedziale = 0;
+	int suma_super_B = 0;
 	for (int i = 0; i <= 100000; i++)
 	{
 		if (czy_jest_pierwsza(i) and czy_jest_pierwsza(suma(i)) and czy_jest_pierwsza(suma_binarna(i)))
 		{
-			if (i <= 1000 and i >= 2)
+			if (i >= 2 and i <= 1000)
 			{
 				ile[0]++;
 			}
-			if (i <= 10000 and i >= 100)
+			if (i >= 100 and i <= 10000)
 			{
 				ile[1]++;
+				suma_super_B += i;
 			}
-			if (i <= 100000 and i >= 1000)
+			if ( i >= 1000 and i <= 100000)
 			{
 				ile[2]++;
 			}
 			
+		}
+		if (czy_jest_pierwsza(suma(i)) and i <= 10000 and i >= 100)
+		{
+			ile_w_przedziale++;
 		}
 	}
 
 	cout << "W przedziale 1 jest: " << ile[0];
 	cout << "\nW przedziale 2 jest: " << ile[1];
 	cout << "\nW przedziale 3 jest: " << ile[2];
-
+	cout << "\n\n|---------------------------------|\n";
+	cout << "|----ODP-B------------------------|\n";
+	cout << "|---------------------------------|\n\n";
+	cout << "W przedziale <100; 10000> jest: " << ile_w_przedziale << " cyfr ktorych suma jest pierwsza";
+	cout << "\nSuma liczb 'Super B Pierwszych' w przedziale <100; 10000> jest: " << ((czy_jest_pierwsza(suma_super_B)) ? "pierwsza" : "nie pierwsza") << endl;
 }
