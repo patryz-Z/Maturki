@@ -9,7 +9,7 @@ inline int the_most_freq_ele(int array_[], int len)
 	int freq_times = 0, freq_element = 0;
 	int local = 1;
 
-	for (int i = 0; i < len; i++)
+	for (int i = 0; i < len-1; i++)
 	{
 		if (array_[i] == array_[i + 1])
 		{
