@@ -78,8 +78,6 @@ int main(void)
 	string return_code;
 
 
-	//to_column(".k..........................s.......S..........................K");
-
 	while (!base_file.eof())
 	{
 		base_file >> line;
