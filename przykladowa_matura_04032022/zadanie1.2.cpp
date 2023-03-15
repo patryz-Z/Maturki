@@ -60,7 +60,7 @@ int main(void)
 	//global variables
 	int num_of_boards = 1;
 
-	//rozne zadania
+	//question variables
 	int min_bierki = INT_MAX;
 	int ile_rownowag = 0;
 	string ilosc_bierek = "";
