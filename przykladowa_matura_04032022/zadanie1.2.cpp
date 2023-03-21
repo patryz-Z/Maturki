@@ -1,129 +1,90 @@
 #include <iostream>
 #include <fstream>
-#include <algorithm>
-#include <string>
 #include <vector>
-
-//male literki - czarne
-//WIELKIE LITERKI - BIALE
+#include <algorithm>
 
 using namespace std;
 
-string rownowaga(string raw)
+int rownowaga(string raw)
 {
-	vector<char>pionki_biale; //tworzenie tablicy wektorowej dla bialych i czarnych bierek, pozwala to dynamicznie dodawac rozne wartosci bez okreslania ich ilosci wpierw
-	vector<char>pionki_czarne;
-	
-	string return_code = ""; 
+	//biali - wielkie litery
+	//czarni - male litery
+	vector<char>biali;
+	vector<char>czarni;
 
-
-	int bierek_counter = 0;
-
-
-	for (int i = 0; i < 64; i++)
+	for (int i = 0; i < raw.length(); i++)
 	{
 		if (islower(raw[i]))
 		{
-			pionki_czarne.push_back(raw[i]);
-			bierek_counter++;
+			czarni.push_back(raw[i]);
 		}
-		if(isupper(raw[i]))
+		if (isupper(raw[i]))
 		{
-			pionki_biale.push_back(tolower(raw[i]));
-			bierek_counter++;
+			biali.push_back(tolower(raw[i]));
 		}
 	}
+	sort(biali.begin(), biali.end());
+	sort(czarni.begin(), czarni.end());
 
-	sort(pionki_biale.begin(), pionki_biale.end());
-	sort(pionki_czarne.begin(), pionki_czarne.end());
 
-	if (pionki_biale == pionki_czarne)
+
+	if (czarni == biali)
 	{
-		return_code = "1" + to_string(bierek_counter);
+		return czarni.size() + biali.size();
 	}
 	else
 	{
-		return_code = "0" + to_string(bierek_counter);
+		return 0;
 	}
 
-
-	return return_code;
-
-
+	
 }
 
 int main(void)
 {
 	fstream base_file;
-	base_file.open("szachy_przyklad.txt", ios::in);
+	base_file.open("szachy.txt", ios::in);
 
-	//global variables
-	int num_of_boards = 1;
-
-	//question variables
-	int min_bierki = INT_MAX;
-	int ile_rownowag = 0;
-	string ilosc_bierek = "";
-	int local_bierki = 0;
-
-	//loop variables
-	int board_limiter = 1;
+	//app variables, dont touch it
 	string line;
-	string board_raw = "";
-	string return_code;
+	int limiter = 1;
+	string raw_board = "";
 
-
-
+	int code = 0;
+	int rownowagi = 0;
+	int najmniej_bierek = INT_MAX;
+	
 	while (!base_file.eof())
 	{
 		base_file >> line;
+		raw_board += line;
 
-		//printf("%s \n", line.c_str());
 
-		board_raw += line;
-
-		if (board_limiter == 8) //if next board
+		if (limiter == 8)
 		{
-			//printf("\n%i In raw: %s \n\n", num_of_boards, board_raw.c_str());
+			code = rownowaga(raw_board);
 
-
-			return_code = rownowaga(board_raw); 
-
-			if (return_code[0] == '1')
+			if (code != 0)
 			{
-				ile_rownowag++;
-				
+				rownowagi++;
+				if (code < najmniej_bierek)
+				{
+					najmniej_bierek = code;
+				}
 			}
 
-			for (int i = 1; i < return_code.length(); i++) //zczytywanie wszystkich cyferek po za 1 z return code
-			{
-				ilosc_bierek += return_code[i];
-			}
+			code = 0;
 
-			local_bierki = stoi(ilosc_bierek.c_str()); //konwersja na int
-
-			if (min_bierki > local_bierki)
-			{
-				min_bierki = local_bierki;
-			}
-
-			//question settings
-			ilosc_bierek = "";
-			local_bierki = 0;
-
-			//general settings
-			num_of_boards++;
-			board_limiter = 1;
-			board_raw = "";
+			//must have
+			raw_board = "";
+			limiter = 1;
 		}
 		else
 		{
-			board_limiter++;
+			limiter++;
 		}
-
 	}
 
-	cout << "W " << ile_rownowag << " planszach byla rownowaga, najmniejsza ilosc bierek wynosi: " << min_bierki;
-
-	base_file.close();
+	printf("jest %i rownowag, najmniej bierek %i", rownowagi, najmniej_bierek);
+	
 }
